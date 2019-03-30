@@ -1,0 +1,29 @@
+{
+  "name": "nodejs-awesomepicsproject",
+  "version": "1.0.0",
+  "description": "An app to post and see awesome pics made with Node.Js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PauloPHLP/NodeJs-AwesomePicsProject.git"
+  },
+  "author": "Paulo Lima",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PauloPHLP/NodeJs-AwesomePicsProject/issues"
+  },
+  "homepage": "https://github.com/PauloPHLP/NodeJs-AwesomePicsProject#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.5",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "mongoose": "^5.4.20"
+  }
+}
