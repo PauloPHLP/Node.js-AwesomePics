@@ -28,7 +28,6 @@ function adjustHeightOfPage(pageNo) {
 }
 
 $(window).load(function(){
-
     adjustHeightOfPage(1); 
 
     $('.gallery-one').magnificPopup({
@@ -63,4 +62,28 @@ $(window).load(function(){
         }, 1000);
     });
     $('body').addClass('loaded');
+});
+
+$('#register_form').on('submit', function(e) {
+    e.preventDefault();
+
+    const user = {
+        name: $('#nameCad').val(),
+        email: $('#emailCad').val(),
+        password: $('#passwordCad').val()
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/api/register',
+        data: JSON.stringify(user),
+        contentType: 'application/json',
+        success: (data) => {
+            alert('The user was added.');
+            window.location.href = "/home";
+        },
+        error: () => {
+            alert('Sorry, an error has occurred.');
+        }
+    })
 });
