@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/register', (req, res) => {
-    if (res.user) 
+    if (req.user) 
         return res.redirect('/home');
     res.render('register');
 })
@@ -44,12 +44,10 @@ app.post('/api/register', (req, res) => {
     user.save((err, doc) => {
         if (err)
             return res.status(400).send(err);
-
         user.generateToken((err, user) => {
             if (err)
                 return res.status(400).send(err);
-            
-            res.cookie('auth', user.token).send('OK');
+                res.cookie('auth', user.token).send('ok');
         })
     })
 })
