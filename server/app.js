@@ -28,40 +28,62 @@ app.use('/icons', express.static(__dirname + './../public/icons'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.get('/', (req, res) => {
+app.get('/', Auth, (req, res) => {
+    console.log(req.user);
     res.render('home');
 })
 
-app.get('/register', (req, res) => {
+app.get('/register', Auth, (req, res) => {
     if (req.user) 
-        return res.redirect('/home');
+        return res.redirect('/');
     res.render('register');
 })
 
 app.post('/api/register', (req, res) => {
     const user = new User(req.body);
-
+    
     user.save((err, doc) => {
-        if (err)
+        if(err) 
             return res.status(400).send(err);
         user.generateToken((err, user) => {
-            if (err)
+            if(err) 
                 return res.status(400).send(err);
-                res.cookie('auth', user.token).send('ok');
+            res.cookie('auth', user.token).send('OK!');
         })
     })
 })
 
-app.get('/login', (req, res) => {
-    if (res.user) 
-        return res.redirect('/home');
+app.get('/login', Auth, (req, res) => {
+    if (req.user) 
+        return res.redirect('/');
     res.render('login');
 })
 
-app.get('/myaccount', (req, res) => {
+app.post('/api/login', (req, res) => {
+    User.findOne({'email': req.body.email}, (err, user) => {
+        if(!user) 
+            return res.status(400).json({message: 'Wrong email.'});
+   
+        user.comparePassword(req.body.password, function(err, isMatch) {
+            if (err) 
+                throw err;
+            if (!isMatch) 
+                return res.status(400).json({message: 'Wrong password!'});
+
+            user.generateToken((err, user) => {
+                if (err) 
+                    return res.status(400).send(err);
+
+                res.cookie('auth',user.token).send('OK!');
+            })
+        })
+    })
+})
+
+app.get('/shareapic', (req, res) => {
     if (res.user) 
-        return res.redirect('/home');
-    res.render('account');
+        return res.redirect('/');
+    res.render('shareapic');
 })
 
 app.listen(config.PORT, () => {

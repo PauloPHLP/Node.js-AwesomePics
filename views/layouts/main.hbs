@@ -21,7 +21,11 @@
     <title>Awesome Pics</title>
 </head>
     <body>
-        {{>header}}
+        {{#if logged}}
+            {{>header_logged}}
+        {{else}}
+            {{>header_not_logged}}
+        {{/if}}
         {{{body}}}
     </body>
 </html>

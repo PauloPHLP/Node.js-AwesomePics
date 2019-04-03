@@ -63,26 +63,3 @@ $(window).load(function(){
     });
     $('body').addClass('loaded');
 });
-
-// $('#register_form').on('submit', (e) => {
-//     e.preventDefault();
-
-//     const user = {
-//         name: $('#nameCad').val(),
-//         email: $('#emailCad').val(),
-//         password: $('#passwordCad').val()
-//     }
-
-//     $.ajax({
-//         type: 'POST',
-//         url: '/api/register',
-//         data: JSON.stringify(user),
-//         contentType: 'application/json',
-//         success: (data) => {
-//             window.location.href = "/home";
-//         },
-//         error: () => {
-//             alert("An issue has occurred.");
-//         }
-//     })
-// })

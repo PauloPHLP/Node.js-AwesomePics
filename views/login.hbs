@@ -10,9 +10,9 @@
                                     <div class="tm-bg-white-translucent text-xs-left tm-textbox tm-2-col-textbox-2 tm-textbox-padding tm-textbox-padding-contact">
                                         <h2 class="tm-contact-info">Login</h2> 
                                         <p class="tm-text">Login to post awesome pics.</p> 
-                                        <form action="index.html" method="post" class="tm-contact-form">
+                                        <form class="tm-contact-form" id="login_form">
                                             <div class="form-group"> 
-                                                <input type="email" id="email" name="email" class="form-control" placeholder="Email" required/>
+                                                <input type="text" id="email" name="email" class="form-control" placeholder="Email" required/>
                                             </div>
                                             <div class="form-group">  
                                                 <input type="password" id="password" name="password" class="form-control" placeholder="Password" required/>
@@ -29,3 +29,27 @@
         </li>
     </ul>
 </div>
+
+<script>
+    $('#login_form').on('submit', function(e) {
+        e.preventDefault();
+
+        const user = {
+            email: $('#email').val(),
+            password: $('#password').val()
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/login',
+            data: JSON.stringify(user),
+            contentType: 'application/json',
+            success: (date) => {
+                window.location.href = "/"
+            },
+            error: () => {
+                alert('Problem.');
+            }
+        })
+    })
+</script>

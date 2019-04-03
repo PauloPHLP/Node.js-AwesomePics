@@ -4,11 +4,11 @@ let Auth = (req, res, next) => {
     const token = req.cookies.auth;
 
     User.findByToken(token, (err, user) => {
-        if (err)
-            throw err;
+        if(err) throw err;
+
         req.user = user;
         next();
     })
 }
 
-module.exports = {Auth};
+module.exports = {Auth}
