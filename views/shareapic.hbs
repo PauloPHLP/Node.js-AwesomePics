@@ -14,7 +14,7 @@
                                                     <div class="tm-bg-white-translucent text-xs-left tm-textbox tm-2-col-textbox-2 tm-textbox-padding tm-textbox-padding-contact">
                                                         <h2 class="tm-contact-info">Hey, {{userName}}!</h2>
                                                         <p class="tm-text">Here you can upload and share an awesome pic with the world! Let's start?</p> 
-                                                        <form action="index.html" method="post" class="tm-contact-form">
+                                                        <form class="tm-contact-form" id="upload_form">
                                                             <div class="form-group"> 
                                                                 <input type="file" id="image" name="image" class="form-control" placeholder="Select a beautiful pic."  required/>
                                                             </div>         
@@ -40,3 +40,25 @@
         </li>
     </ul>
 </div>
+
+<script>
+    $('#upload_form').submit(function(e) {
+        e.preventDefault();
+
+        var formData = new FormData($(this)[0]);
+        
+        $.ajax({
+            url: '/api/shareapic',
+            type: 'POST',
+            data: formData,
+            async: false,
+            contentType: false,
+            cache: false,
+            enctype: 'multipart/form-data',
+            processData: false,
+            success: response => {
+                alert(response);
+            }
+        })
+    })
+</script>

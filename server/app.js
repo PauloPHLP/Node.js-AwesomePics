@@ -3,12 +3,25 @@ const hbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const moment = require('moment');
+const multer = require('multer');
 const config = require('./config/config').get(process.env.NODE_ENV);
 const {User} = require('./models/user');
 const {Auth} = require('./middleware/auth');
 
 const app = express();
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb (null, 'uploads/')
+    },
+    filename: (req, file, cb) => {
+        cb (null, `${file.originalname}`)
+    }
+})
+
+const upload = multer({
+    storage
+}).single('image');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE, {useNewUrlParser: true});
@@ -108,6 +121,14 @@ app.get('/shareapic', Auth, (req, res) => {
             logged: true,
             userName: req.user.name
         })
+    })
+})
+
+app.post('/api/shareapic', (req, res) => {
+    upload(req, res, function(err) {
+        if (err)
+            return res.end('Invalid file format.');
+        res.end('Image uploaded with success!');
     })
 })
 
