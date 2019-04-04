@@ -29,8 +29,17 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.get('/', Auth, (req, res) => {
-    console.log(req.user);
-    res.render('home');
+    if (!req.user) { 
+        return res.render('home', {
+            logged: false
+        });
+    }
+    User.find({'_id': req.user._id}).exec((err, user) => {
+        res.render('home', {
+            logged: true,
+            user
+        })
+    })
 })
 
 app.get('/register', Auth, (req, res) => {
@@ -60,30 +69,46 @@ app.get('/login', Auth, (req, res) => {
 })
 
 app.post('/api/login', (req, res) => {
+    console.log(req.body);
     User.findOne({'email': req.body.email}, (err, user) => {
         if(!user) 
             return res.status(400).json({message: 'Wrong email.'});
    
         user.comparePassword(req.body.password, function(err, isMatch) {
-            if (err) 
+            if(err) 
                 throw err;
-            if (!isMatch) 
-                return res.status(400).json({message: 'Wrong password!'});
+            if(!isMatch) 
+                return res.status(400).json({message: 'Wrong password.'});
 
             user.generateToken((err, user) => {
-                if (err) 
+                if(err) 
                     return res.status(400).send(err);
-
-                res.cookie('auth',user.token).send('OK!');
+                res.cookie('auth', user.token).send('OK!');
             })
         })
     })
 })
 
-app.get('/shareapic', (req, res) => {
-    if (res.user) 
-        return res.redirect('/');
-    res.render('shareapic');
+app.get('/logout', Auth, (req, res) => {
+    req.user.deleteToken(req.token, (err, user) => {
+        if(err) 
+            return res.status(400).send(err);
+        res.redirect('/')
+    })
+})
+
+app.get('/shareapic', Auth, (req, res) => {
+    if (!req.user) { 
+        return res.render('login', {
+            logged: false
+        });
+    }
+    User.find({'_id': req.user._id}).exec((err, user) => {
+        res.render('shareapic', {
+            logged: true,
+            userName: req.user.name
+        })
+    })
 })
 
 app.listen(config.PORT, () => {

@@ -18,6 +18,10 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         require: true
+    },
+    token: {
+        type: String,
+        require: true
     }
 }, {timestamps: true});
 
@@ -55,7 +59,7 @@ userSchema.statics.findByToken = function(token, cb) {
 userSchema.methods.generateToken = function(cb) {
     var user = this;
     var token = jwt.sign(user._id.toHexString(), config.SECRET);
-    
+
     user.token = token;
     user.save((err, user) => {
         if(err) 
@@ -65,7 +69,7 @@ userSchema.methods.generateToken = function(cb) {
 }
 
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
-    bcrypt.compare(candidatePassword, this.password,function(err, isMatch) {
+    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
         if(err) 
             return cb(err);
         cb(null, isMatch);
@@ -76,9 +80,9 @@ userSchema.methods.deleteToken = function(token, cb) {
     var user = this;
 
     user.update({$unset: {token: 1}}, (err, user) => {
-        if (err)
+        if (err) 
             return cb(err);
-        cb(null, user);
+        cb (null, user);
     })
 }
 

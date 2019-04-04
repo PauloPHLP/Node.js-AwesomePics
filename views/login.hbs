@@ -48,7 +48,8 @@
                 window.location.href = "/"
             },
             error: () => {
-                alert('Problem.');
+                alert('Something went wrong. Please check you e-mail and password.');
+                window.location.reload();
             }
         })
     })
