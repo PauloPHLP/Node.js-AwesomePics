@@ -19,7 +19,7 @@
                                                                 <input type="file" id="image" name="image" class="form-control" placeholder="Select a beautiful pic."  required/>
                                                             </div>         
                                                             <div class="form-group">
-                                                                <input type="text" id="name" name="name" class="form-control" placeholder="Choose a title for your image." maxlength="15" required/>
+                                                                <input type="text" id="title" name="title" class="form-control" placeholder="Choose a title for your image." maxlength="15" required/>
                                                             </div>
                                                             <div class="form-group">  
                                                                 <input type="text" id="text" name="text" class="form-control" placeholder="Say something nice about your image. Be short." maxlength="100" required/>
@@ -56,8 +56,12 @@
             cache: false,
             enctype: 'multipart/form-data',
             processData: false,
-            success: response => {
-                alert(response);
+            success: (data) => {
+                alert('Image uploaded successfully!');
+                window.location.href = "/"
+            },
+            error: () => {
+                alert('An issue has occurred!');
             }
         })
     })
