@@ -37,28 +37,26 @@
 </div>
 
 <script>
-$('#register_form').submit((e) => {
-    e.preventDefault();
+    $('#register_form').submit((e) => {
+        e.preventDefault();
 
-    const user = {
-        name: $('#name').val(),
-        email: $('#email').val(),
-        password: $('#password').val()
-    }
-
-    console.log(user);
-
-    $.ajax({
-        type:'POST',
-        url: '/api/register',
-        data: JSON.stringify(user),
-        contentType: 'application/json',
-        success: (data) => {
-            window.location.href = "/"
-        },
-        error: () => {
-            alert('An issue has occurred!');
+        const user = {
+            name: $('#name').val(),
+            email: $('#email').val(),
+            password: $('#password').val()
         }
-    })
-})    
+        
+        $.ajax({
+            type:'POST',
+            url: '/api/register',
+            data: JSON.stringify(user),
+            contentType: 'application/json',
+            success: (data) => {
+                window.location.href = "/"
+            },
+            error: () => {
+                alert('An issue has occurred!');
+            }
+        })
+    })    
 </script>

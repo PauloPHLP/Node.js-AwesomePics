@@ -16,6 +16,10 @@ const postSchema = mongoose.Schema({
     imageName: {
         type: String,
         require: true
+    },
+    date: {
+        type: Number,
+        require: true
     }
 }, {timeStamps: true});
 

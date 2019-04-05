@@ -11,6 +11,7 @@ const {Auth} = require('./middleware/auth');
 
 const app = express();
 let imageName = '';
+let date = '';
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE, {useNewUrlParser: true});
@@ -33,7 +34,7 @@ app.use(cookieParser());
 
 app.get('/', Auth, (req, res) => {
     if (!req.user) { 
-        Post.find().exec((err, doc) => {
+        Post.find().sort({date: 'desc'}).exec((err, doc) => {
             if (err)
                 return res.status(400).send(err);
             res.render('home', {
@@ -43,7 +44,7 @@ app.get('/', Auth, (req, res) => {
         })
     } else {
         User.find({'_id': req.user._id}).exec((err, user) => {
-            Post.find().exec((err, doc) => {
+            Post.find().sort({date: 'desc'}).exec((err, doc) => {
                 if (err)
                     return res.status(400).send(err);
                 res.render('home', {
@@ -130,7 +131,8 @@ app.post('/api/shareapic', (req, res) => {
             cb (null, 'uploads/')
         },
         filename: (req, file, cb) => {
-            imageName = Date.now() + "_" + file.originalname;
+            date = Date.now();
+            imageName = date + "_" + file.originalname;
             cb (null, `${imageName}`);
         }
     })
@@ -143,7 +145,8 @@ app.post('/api/shareapic', (req, res) => {
         const post = new Post({
             title: req.body.title,
             text: req.body.text,
-            imageName: imageName
+            imageName: imageName,
+            date: date
         });
 
         post.save((err, doc) => {
@@ -158,5 +161,5 @@ app.post('/api/shareapic', (req, res) => {
 })
 
 app.listen(config.PORT, () => {
-    console.log(`Awesome Pics running on port ${config.PORT}.`);
+    console.log(`Awesome pics running on port ${config.PORT}`);
 })
